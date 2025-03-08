@@ -1,0 +1,97 @@
+// 日式风格配色
+:root {
+  --sakura-pink: #FFB7C5;
+  --sakura-light: #FFDEE9;
+  --washi-beige: #F5F2E9;
+  --indigo-blue: #1A535C;
+  --matcha-green: #4F7942;
+  --dark-gray: #333333;
+  --light-gray: #F0F0F0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background-color: var(--washi-beige);
+  color: var(--dark-gray);
+  line-height: 1.6;
+}
+
+// 自定义滚动条样式 - 日式风格
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--washi-beige);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--sakura-pink);
+  background-image: linear-gradient(45deg, var(--sakura-pink), var(--sakura-light));
+  border-radius: 8px;
+  border: 2px solid var(--washi-beige);
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--sakura-light);
+  background-image: linear-gradient(45deg, var(--sakura-light), var(--sakura-pink));
+}
+
+::-webkit-scrollbar-corner {
+  background-color: var(--washi-beige);
+}
+
+/* Firefox 滚动条样式 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--sakura-pink) var(--washi-beige);
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 500;
+}
+
+.japanese-pattern {
+  background-color: var(--washi-beige);
+  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23FFB7C5' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M0 20L20 0v20H0zm20 0l20-20v20H20z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .layout-container {
+    flex-direction: column;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+// 樱花飘落动画
+@keyframes falling {
+  0% {
+    transform: translateY(-10%) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.sakura {
+  position: fixed;
+  z-index: 999;
+  pointer-events: none;
+}
