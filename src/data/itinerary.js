@@ -31,14 +31,20 @@ export const itineraryData = [
     title: '京都赏樱之旅',
     events: [
       {
-        time: '08:00',
+        time: '07:30',
         title: '早餐',
         description: '在酒店或附近咖啡店享用早餐。'
       },
       {
-        time: '09:00',
+        time: '08:00',
         title: '前往京都',
         description: '搭乘JR线从大阪前往京都（约30分钟车程）。',
+        routeId: 'osaka_to_kyoto'
+      },
+      {
+        time: '09:00',
+        title: '入住京都酒店-xxx',
+        description: '搭乘地铁入住京都酒店，放下行李',
         routeId: 'osaka_to_kyoto'
       },
       {
@@ -90,8 +96,8 @@ export const itineraryData = [
       },
       {
         time: '22:30',
-        title: '返回大阪',
-        description: '乘坐JR线返回大阪入住酒店。',
+        title: '返回京都酒店-xxx',
+        description: '返回京都酒店',
         routeId: 'kyoto_to_osaka'
       }
     ]
@@ -108,7 +114,7 @@ export const itineraryData = [
       {
         time: '09:00',
         title: '前往奈良',
-        description: '从大阪乘坐近铁或JR线前往奈良（约45分钟）。',
+        description: '从京都酒店附近地铁或JR线前往奈良（约45分钟）。',
         routeId: 'osaka_to_nara'
       },
       {
@@ -156,12 +162,6 @@ export const itineraryData = [
         title: '京都站晚餐',
         description: '在京都站附近享用晚餐，可以品尝京都拉面或其他当地特色料理。',
         locationId: 'kyoto_station_dinner'
-      },
-      {
-        time: '21:00',
-        title: '返回大阪',
-        description: '乘坐JR列车返回大阪。',
-        routeId: 'kyoto_to_osaka'
       }
     ]
   },
@@ -170,9 +170,14 @@ export const itineraryData = [
     title: '大阪观光与美食',
     events: [
       {
-        time: '08:00',
+        time: '07:30',
         title: '早餐与退房',
-        description: '在酒店享用早餐后退房。可将行李存放在酒店或车站储物柜中。'
+        description: '在酒店享用早餐后退房'
+      },
+      {
+        time: '08:00',
+        title: '乘JR京都线返回大阪（30分钟），行李寄存大阪站',
+        description: '乘JR京都线返回大阪（30分钟），行李寄存大阪站'
       },
       {
         time: '09:30',

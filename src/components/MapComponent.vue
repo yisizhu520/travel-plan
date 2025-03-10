@@ -2,6 +2,30 @@
   <div class="map-wrapper">
     <div id="map" class="map-container"></div>
     <div class="map-controls">
+      <div class="search-box">
+        <el-input
+          v-model="searchQuery"
+          size="small"
+          placeholder="搜索地点..."
+          @input="handleSearch"
+          clearable
+        >
+          <template #prefix>
+            <i class="el-icon-search"></i>
+          </template>
+        </el-input>
+        <div v-if="searchResults.length > 0" class="search-results">
+          <div
+            v-for="result in searchResults"
+            :key="result.place_id"
+            class="search-result-item"
+            @click="handleSelectLocation(result)"
+          >
+            <i class="el-icon-location-information"></i>
+            <span>{{ result.display_name }}</span>
+          </div>
+        </div>
+      </div>
       <el-button size="small" type="primary" @click="showAllLocations">
         <i class="el-icon-full-screen"></i> 显示全部
       </el-button>
@@ -39,6 +63,9 @@ export default {
     const markers = ref({});
     const routeLines = ref({});
     const routeControls = ref({});
+    const searchQuery = ref('');
+    const searchResults = ref([]);
+    const searchMarker = ref(null);
     
     // 自定义图标
     const createCustomIcon = (type) => {
@@ -223,7 +250,67 @@ export default {
       showAllLocations
     });
     
+    // 处理搜索输入
+    const handleSearch = async () => {
+      if (!searchQuery.value || searchQuery.value.length < 2) {
+        searchResults.value = [];
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery.value)}&viewbox=134.5,35.5,136.5,34&bounded=1`
+        );
+        const data = await response.json();
+        searchResults.value = data.slice(0, 5);
+      } catch (error) {
+        console.error('搜索地点时出错:', error);
+        searchResults.value = [];
+      }
+    };
+
+    // 处理地点选择
+    const handleSelectLocation = (location) => {
+      const lat = parseFloat(location.lat);
+      const lng = parseFloat(location.lon);
+
+      // 清除之前的搜索标记
+      if (searchMarker.value) {
+        map.value.removeLayer(searchMarker.value);
+      }
+
+      // 添加新的搜索标记
+      searchMarker.value = L.marker([lat, lng], {
+        icon: L.divIcon({
+          className: 'custom-div-icon search-icon',
+          html: '<div style="background-color: #9C27B0;" class="marker-pin"></div>',
+          iconSize: [30, 42],
+          iconAnchor: [15, 42],
+          popupAnchor: [0, -42]
+        })
+      }).addTo(map.value);
+
+      // 添加弹出信息
+      searchMarker.value.bindPopup(
+        `<div class="popup-content">
+          <h3>搜索位置</h3>
+          <p>${location.display_name}</p>
+        </div>`
+      ).openPopup();
+
+      // 将地图中心设置到选中的位置
+      map.value.setView([lat, lng], 15);
+
+      // 清空搜索结果
+      searchResults.value = [];
+      searchQuery.value = '';
+    };
+
     return {
+      searchQuery,
+      searchResults,
+      handleSearch,
+      handleSelectLocation,
       showAllLocations
     };
   }
@@ -308,5 +395,45 @@ export default {
 
 :deep(.attraction-icon .marker-pin) {
   background-color: #FF5252;
+}
+
+.search-box {
+  margin-bottom: 10px;
+  position: relative;
+  width: 250px;
+}
+
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.search-result-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.search-result-item:hover {
+  background-color: #f5f7fa;
+}
+
+.search-result-item i {
+  color: #409EFF;
+}
+
+:deep(.search-icon .marker-pin) {
+  background-color: #9C27B0;
 }
 </style>
